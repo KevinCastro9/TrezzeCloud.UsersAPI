@@ -113,11 +113,17 @@ jobs:
         with:
           version: 'v1.36.5'
 
+      - name: Install kubelogin
+        uses: azure/use-kubelogin@v1
+        with:
+          kubelogin-version: 'latest'
+
       - name: Update Kubernetes deployment
         shell: bash
         run: |
           set -euo pipefail
           az aks get-credentials --resource-group "$AKS_RESOURCE_GROUP" --name "$AKS_NAME" --overwrite-existing
+          kubelogin convert-kubeconfig -l azurecli
           kubectl -n fcg-fase4 get deployment users-api
           kubectl -n fcg-fase4 set image deployment/users-api users-api="$IMAGE"
           if ! kubectl -n fcg-fase4 rollout status deployment/users-api --timeout=360s; then
