@@ -117,7 +117,8 @@ jobs:
         uses: azure/use-kubelogin@v1
         with:
           kubelogin-version: 'latest'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update Kubernetes deployment
         shell: bash
